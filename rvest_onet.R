@@ -19,6 +19,7 @@ i <- 0 #zabezpieczenie
 while((length(html_attr(html_nodes(s, ".k_makeComment"), "href")) > 2 && i < 1000) ||
       (length(html_attr(html_nodes(s, ".k_makeComment"), "href")) == 2 && i == 0)) {
     autor <- html_nodes(s, ".k_nForum_ReaderContentFrame") %>% html_node(".k_locked") %>% html_text()
+    parent.autor <- html_nodes(s, ".k_nForum_ReaderContentFrame") %>% html_node(".k_parentAuthor") %>% html_text()
     komentarz <- html_nodes(s, ".k_nForum_ReaderContentFrame") %>% html_node(".k_content") %>% html_text()
     czas <- html_nodes(s, ".k_nForum_ReaderContentFrame") %>% html_node(".k_nForum_CommentInfo") %>% html_node("span") %>% html_text()
     ocena <- html_nodes(s, ".k_nForum_ReaderContentFrame") %>% html_nodes(".k_nForum_MarkTipUpPercent") %>% html_text()
@@ -33,12 +34,13 @@ while((length(html_attr(html_nodes(s, ".k_makeComment"), "href")) > 2 && i < 100
 }
 
 autor <- html_nodes(s, ".k_nForum_ReaderContentFrame") %>% html_node(".k_locked") %>% html_text()
+parent.autor <- html_nodes(s, ".k_nForum_ReaderContentFrame") %>% html_node(".k_parentAuthor") %>% html_text()
 komentarz <- html_nodes(s, ".k_nForum_ReaderContentFrame") %>% html_node(".k_content") %>% html_text()
 czas <- html_nodes(s, ".k_nForum_ReaderContentFrame") %>% html_node(".k_nForum_CommentInfo") %>% html_node("span") %>% html_text()
 ocena <- html_nodes(s, ".k_nForum_ReaderContentFrame") %>% html_nodes(".k_nForum_MarkTipUpPercent") %>% html_text()
 ocena.liczba <- html_nodes(s, ".k_nForum_ReaderContentFrame") %>% html_nodes(".k_nForum_MarkTipCount") %>% html_text()
 
 WynikiCzastkowe <- as.data.frame(cbind(autor,komentarz,czas,ocena,ocena.liczba))
-Wyniki <- rbind(Wyniki, WynikiCzastkowe)
+Wyniki <- cbind(rbind(Wyniki, WynikiCzastkowe), dzisaj = Sys.Date())
 
 write.csv(Wyniki, "przyklad1.csv")
