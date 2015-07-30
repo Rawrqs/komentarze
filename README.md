@@ -1,0 +1,2 @@
+# komentarze
+Analiza komentarzy
